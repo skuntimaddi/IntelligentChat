@@ -3,106 +3,57 @@
 
 % Initialization procedures
 start:-
-    consult('temp.pl'),nl,
     consult('info.pl'),nl,
-    consult('kb.pl'),nl,
-    menu.
+    menu(ID).
 
-% Saves new temporary info for use by inference engine
-save:-
-    write('Saving data'),nl,
-    tell('temp.pl'),
-    listing(grade),
-    listing(interest),
-    told,
-    write('Done'),nl.
-
-% Clears all temporary data from temporary data file
-clear:-
-    abolish(grade/2),
-    abolish(interest/2),
-    tell('temp.pl'),
-    told.
-
-prompt_grade(Subject, Title):-
-    write("Please enter the subject: "),
-    write(Title),
-    write(": "),
-    read(Grade),
-    assert(grade(Subject, Grade)).
-
-% Prompts for the level of interest in specified area
-prompt_interest(Interest, Title):-
-    write("What is your level of interest in "),
-    write(Title),
-    write(" "),
-    read(Interest_Level),
-    assert(interest(Interest, Interest_Level)).
-
-% Prompts for user levels of the specified attribute
-prompt_levels(Interest, Title):-
-    write("What is your level of "),
-    write(Title),
-    write(" "),
-    read(Levels),
-    assert(interest(Interest, Levels)).
-
-% Gives instructions  for entering grades
-grade_instructions:-
-    write("Enter the grades you got for the following subjects"),nl,
-    write("(A is 12 points, A- is 11 points etc...)"),nl,
-    write("If you did not do the subject enter 0 for the grade"),nl,nl.
-
-interest_instructions:-
-    nl,
-    write("Great, now you will answer a few more questions concerning yourself."),nl,
-    write("Kindly respond with numbers from 0 to 4:"),nl,nl,
-    write("0 - None"),nl,
-    write("1 - Low"),nl,
-    write("2 - Medium"),nl,
-    write("3 - High"),nl,
-    write("4 - Very high"),nl,nl.
+selectedMenu(ID, option):-
+    write("Wrong option!", option),nl,
+    menu(ID),!.
 
 %Displays menu to user
-menu:-
-    clear, /* Clear existing facts before asking for new ones */
-    write("Hello, I'm your friendly chat bot, I'll guide you about admission process eligibility criteria, examiniation pattern, fee structure, seat allotment etc."),
-    write("For eligibility criteria, I'll ask questions on your education and grades so that I can tell you for what branches you are eligible."),
-    write("For application process, I'll ask questions on deadline, exam date, exam centers, special instructions, syllabus, types of questions asked, scholarship etc."),
-    write("For application status, I'll tell you about BITSAT score of you, different cut-offs, seat allocated to you."),
-    
-    % grade_instructions,
-    % prompt_grade(mat, "Mathematics"),
-    % prompt_grade(eng, "English"),
-    % prompt_grade(kis, "Kiswahili"),
-    % prompt_grade(chem, "Chemistry"),
-    % prompt_grade(phy, "Physics"),
-    % prompt_grade(bio, "Biology"),
-    % prompt_grade(geo, "Geography"),
-    % prompt_grade(his, "History"),
-    % prompt_grade(cre, "CRE"),
-    % prompt_grade(opt_unit, "optional unit"),
-
-    % interest_instructions,
-    % prompt_interest(logic, "logic?"),
-    % prompt_interest(management, "management activities?"),
-    % prompt_interest(art, "painting and drawing?"),
-    % prompt_interest(medicine, "medical activities?"),
-    % prompt_interest(food, "culinary art work(food industry)?"),
-    % prompt_interest(arch, "construction design and management activities?"),
-    % prompt_interest(business, "business activities ie economics,finance and marketing?"),
-    % prompt_interest(outdoor, "outdoor working area and activities?"),
-    % prompt_levels(tolerance, "stress tolerance?"),
-    % prompt_interest(history, "historical information?"),
-    % prompt_interest(law, "legal and criminal justice?"),
-    % prompt_interest(inventive, "thinking and coming up with new ideas?"),
-    % prompt_interest(comp, "computing?"),
-    % prompt_interest(social, "sociability?"),
-    % prompt_levels(perfectionist, "attention to details?"),
-    % prompt_interest(technical, "doing technical activities?"),
-    % prompt_interest(discovery, "discovering new things?"),
-    % prompt_interest(serving_people, "serving people?"),
-    % prompt_interest(catering, "catering?"),
-    % prompt_interest(sport, "physical and sporting activities?"),
-
+menu(ID):-
+    write("Hello, I'm your friendly chat bot, I'll guide you about admission process eligibility criteria, examiniation pattern, fee structure, seat allotment etc."),nl,
+    write("For eligibility criteria, I'll ask questions on your education and grades so that I can tell you for what branches you are eligible."),nl,
+    write("For application process, I'll ask questions on deadline, exam date, exam centers, special instructions, syllabus, types of questions asked, scholarship etc."),nl,
+    write("For application status, I'll tell you about BITSAT score of you, different cut-offs, seat allocated to you."),nl,
+    write("For admission, I'll tell you about fee structure, payment details, payment status and confirmation etc."),nl,
+    write("To proceed, please select any option from below options."),nl,
+    write("1 -> Eligibility criteria"),nl,
+	write("2 -> Application process"),nl,
+	write("3 -> Application status"),nl,
+	write("4 -> Admission"),nl,
+    write("5 -> Quit"),nl,
+    write("> "),
+    read(option),
+    selectedMenu(ID, option),
+    nl,
     save.
+
+selectedMenu(ID, 1):-
+    eligibilityCriteria(ID), !.
+
+selectedMenu(ID, 2):-
+    applicationProcess(ID), !.
+
+selectedMenu(ID, 3):-
+    applicationStatus(ID), !.
+
+selectedMenu(ID, 4):-
+    admission(ID), !.
+
+selectedMenu(ID, 5):-
+    write("Good bye, it was fun assisting you!"), nl,
+    personDetails(ID, name), write(name),
+    undo.
+
+eligibilityCriteria(ID) :- 
+    write("Elgibility for BE degree.....""),nl,
+    person(ID, name),
+    write("What is your CGPA 12th Board Exam?""),nl,
+    read(Cgpa),
+    C is round(Cgpa),
+    eligible(C, Branches),
+    write(Name),write(","),
+    printlist(Branches),
+    assert(ec(ID, name, Cgpa, Branches)),nl,nl,nl,
+    greeting(ID).
