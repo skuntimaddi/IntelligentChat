@@ -10,7 +10,7 @@ selectedMenu(ID, option):-
     write("Wrong option!", option),nl,
     menu(ID),!.
 
-%Displays menu to user
+% Displays menu to user
 menu(ID):-
     write("Hello, I'm your friendly chat bot, I'll guide you about admission process eligibility criteria, examiniation pattern, fee structure, seat allotment etc."),nl,
     write("For eligibility criteria, I'll ask questions on your education and grades so that I can tell you for what branches you are eligible."),nl,
@@ -45,9 +45,9 @@ selectedMenu(ID, 5):-
     write("Good bye, it was fun assisting you!"), nl,
     personDetails(ID, name), write(name),
     undo.
-
-eligibilityCriteria(ID) :- 
-    write("Elgibility for BE degree.....""),nl,
+	
+eligibilitycriteria(ID) :- 
+    write("Elgibility for BE degree....."),nl,
     person(ID, name),
     write("What is your CGPA 12th Board Exam?""),nl,
     read(Cgpa),
